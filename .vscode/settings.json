@@ -1,0 +1,12 @@
+{
+    "debug.javascript.defaultRuntimeExecutable": {
+
+
+        "pwa-node": "node"
+    },
+    "debug.javascript.debugByLinkOptions": "on",
+    "workbench.settings.useSplitJSON": false,
+
+
+
+}
