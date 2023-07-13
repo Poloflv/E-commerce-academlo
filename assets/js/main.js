@@ -54,6 +54,15 @@ function handleShowCart() {
     });
 }
 
+function closeInicio() {
+    const pInicial = document.querySelector("#closeP");
+    const cartInicioHTML = document.querySelector(".cart");
+
+    pInicial.addEventListener("click", function() {
+        cartInicioHTML.classList.toggle("cart__show")
+    });
+}
+
 
 function addCartFromProducts(db) {
     const productsHTML = document.querySelector(".products");
@@ -258,18 +267,34 @@ function MoodDark() {
 function filterProducts() {
     document.addEventListener("DOMContentLoaded",function () {
         var mixer = mixitup('.products');
-    });
 
+        
+    });
+    
+}
+
+function filterProducts2() {
+    const padre = document.querySelector("#products")
     const btns = document.querySelectorAll(".button__filter");
 
-    // btns.forEach((buttons__filter) =>{
-    //     buttons__filter.addEventListener("click",(e) => {
-    //         btns.forEach((button__filter) => button__filter.classList.remove(".btn--active"));
-    //         e.target.classList.add(".btn--active");
-    //         console.log(e.target);
+    btns.forEach((buttons__filter) =>{
+        buttons__filter.addEventListener("click",(e) => {
+            btns.forEach((button__filter) => button__filter.classList.remove("btn--active"));
+            btns.forEach((button__filter) => button__filter.classList.add("button__filter"));
             
-    //     });
-    // });
+            
+            if (buttons__filter.classList.contains("button__filter") ) {
+                buttons__filter.classList.add("btn--active");
+                buttons__filter.classList.remove("button__filter");
+            } 
+            
+        });
+    });
+
+    window.addEventListener("load", function () {
+        padre.classList.add("btn--active")
+        padre.classList.remove("button__filter")
+    })
 }
 
 function loader() {
@@ -283,22 +308,24 @@ function loader() {
 
 
 
+
+
 function addModal(db) {
     const productsHTML = document.querySelector(".products");
     
     productsHTML.addEventListener("click", function(e) {
         if(e.target.classList.contains("modal")){
-            const id = Number(e.target.id);
+            const idconst = Number(e.target.id);
 
             
-            const containerProductFind = db.products.find((product) => product.id === id);
-            const {image, category, description, name,price,quantity} = containerProductFind;
+            const containerProductFind = db.products.find((product) => product.id === idconst);
+            const {image, category,id, description, name,price,quantity} = containerProductFind;
             const modalContentInfoHTML = document.querySelector(".modal__content__info");
             
             
             const modalPoloHTML = document.querySelector(".modal-polo");
             const iconCloseHTML = document.querySelector(".iconClose");
-
+            
             modalContentInfoHTML.innerHTML = `
             <div class="modal__content__img">
             <img src="${image}" alt="" />
@@ -307,28 +334,55 @@ function addModal(db) {
             <p>${description}</p>
             <div class="priceModal">
             <h3>$${price}</h3>
-            <i class='bx bx-plus'></i>
+            <i class='bx bx-plus' id="${id}"></i>
             <span><b>Stock:</b> ${quantity} </span>
             </div>
             `;
             
+            
+
+            modalPoloHTML.classList.add("modal-polo-hidden")
+            
+            iconCloseHTML.addEventListener("click", () => {
+                modalPoloHTML.classList.remove("modal-polo-hidden")
+            });
+            
+            
+            
+            
+            
+                }
+                
+            })
+        }
+        
+        
+        function modal(db) {
+        
+            const modalContentInfoHTML = document.querySelector(".modal__content__info");
+            
+            
             modalContentInfoHTML.addEventListener("click", (e) => {
+
                 if(e.target.classList.contains("bx-plus")){
+                    const id = Number(e.target.id);
+                    const containerProductFind = db.products.find((product) => product.id === id);
+                    
 
                     if(db.cart[containerProductFind.id] ){
                         
-                        if(containerProductFind.quantity === db.cart[containerProductFind.id].amount ) return ;
+                        if(containerProductFind.quantity === db.cart[containerProductFind.id].amount ) return alert("No tenemos mas en bodega");
                         
                         
                         db.cart[containerProductFind.id].amount++;
-
+        
                     }else {
                         if( containerProductFind.quantity === 0) return alert("No tenemos mas en bodega");
-
+        
                         db.cart[containerProductFind.id] = {...containerProductFind, amount: 1};
-
+        
                     }
-
+        
                     
                     
                     window.localStorage.setItem("cart", JSON.stringify(db.cart) )
@@ -340,28 +394,13 @@ function addModal(db) {
                     
                 }
             } )
-
-            modalPoloHTML.classList.add("modal-polo-hidden")
-            
-            iconCloseHTML.addEventListener("click", () => {
-                modalPoloHTML.classList.remove("modal-polo-hidden")
-            });
-
-
-
-
-            
-                }
-                
-            })
         }
-
-
 
 function showNav() {
 
     const navbar = document.querySelector("#header");
-    const aChange = document.querySelector("#link") 
+    const aChange = document.querySelector("#link");
+    const changeCart = document.querySelector("#cart");
     
     // window.addEventListener("scroll", () => {
     //     if (window.scroll === 150) {
@@ -370,6 +409,13 @@ function showNav() {
     //         navbar.classList.remove("show__header");
 
     //     }})
+
+    window.addEventListener("load", function () {
+        if (changeCart.classList.contains("cart")) {
+            changeCart.classList.remove("cart");
+            changeCart.classList.add("cart__inicio");
+        }
+    })
 
     window.onscroll = function() {
         if (window.scrollY >= 88) {
@@ -382,7 +428,10 @@ function showNav() {
 
         if (window.scrollY <= 499) {
             
-             
+            if (changeCart.classList.contains("cart")) {
+                changeCart.classList.remove("cart");
+                changeCart.classList.add("cart__inicio");
+            }
 
             if (aChange.classList.contains("link__change")) {
                 aChange.classList.remove("link__change");
@@ -390,12 +439,20 @@ function showNav() {
         } 
 
         if (window.scrollY >= 500) {
+
+
+            if (changeCart.classList.contains("cart__inicio")) {
+                changeCart.classList.remove("cart__inicio");
+                changeCart.classList.add("cart");
+            }
             
             aChange.classList.add("link__change");
         } 
 
       };
 }
+
+
 
     async function main () {
             const db = {
@@ -419,7 +476,9 @@ function showNav() {
     loader();
     addModal(db);
     showNav();
-
+    modal(db);
+    closeInicio();
+    filterProducts2();
 }
 
 main();
