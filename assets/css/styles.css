@@ -788,6 +788,10 @@ footer p a{
         width: 100%;
         
     }
+
+    .cart__inicio{
+        width: 100%;
+    }
     section{
         display: flex;
         flex-direction:column;
