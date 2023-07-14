@@ -45,10 +45,11 @@ function printProducts(db) {
     productsHTML.innerHTML = html;
 }
 
+
 function handleShowCart() {
     const iconCartHTML = document.querySelector(".bx-cart");
     const cartHTML = document.querySelector(".cart");
-
+    
     iconCartHTML.addEventListener("click", function() {
         cartHTML.classList.toggle("cart__show")
     });
@@ -297,14 +298,6 @@ function filterProducts2() {
     })
 }
 
-function loader() {
-    window.addEventListener("load", function () {
-        document.getElementById("loader").classList.toggle("loader2")
-    })
-
-
-    
-}
 
 
 
@@ -453,16 +446,15 @@ function showNav() {
 }
 
 
-
-    async function main () {
-            const db = {
+async function main () {
+    const db = {
         products: JSON.parse(window.localStorage.getItem("products")) || await getProducts(),
         cart: JSON.parse(window.localStorage.getItem("cart")) || {},
     };
     
-
+    
     // console.log(db.products);
-
+    
     printProducts(db);
     handleShowCart();
     addCartFromProducts(db);
@@ -473,7 +465,7 @@ function showNav() {
     handlePrintAmountProducts(db);
     MoodDark();
     filterProducts();
-    loader();
+    
     addModal(db);
     showNav();
     modal(db);
@@ -482,3 +474,21 @@ function showNav() {
 }
 
 main();
+// function loader() {
+//     window.addEventListener("load", function () {
+
+//         if (document.getElementById("loader").classList.contains("loader")) {
+//             document.getElementById("loader").classList.add("loader2")
+//         }
+
+        
+        
+//     })
+// }
+
+
+setTimeout(() => {
+    const loaderHTML = document.querySelector("#loader");
+    loaderHTML.classList.add("loader2");
+    
+  }, 1000);
